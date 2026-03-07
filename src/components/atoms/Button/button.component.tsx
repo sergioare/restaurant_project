@@ -22,7 +22,7 @@ export type ButtonProps = {
   disabled?: boolean;
   type?: React.ButtonHTMLAttributes<HTMLButtonElement>["type"];
   onClick?: React.MouseEventHandler;
-  children?: string;
+  children?: string | React.ReactNode;
   className?: string;
   loading?: boolean;
   fullWidth?: boolean;
@@ -48,6 +48,9 @@ export const Button = (props: ButtonProps) => {
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     if (onClick) onClick(e);
   };
+
+  const isSimpleContent =
+    typeof children === "string" || typeof children === "number";
 
   const fullWidthStyles = fullWidth ? "buttonComponent__fullWidth" : "";
   const leftStyles =
@@ -80,10 +83,17 @@ export const Button = (props: ButtonProps) => {
               )}
             </div>
           )}
-
-          <Typography variant="p1" weight="semibold" className={textClassName}>
-            {children}
-          </Typography>
+          {isSimpleContent ? (
+            <Typography
+              variant="p1"
+              weight="semibold"
+              className={textClassName}
+            >
+              {children}
+            </Typography>
+          ) : (
+            children
+          )}
 
           {!!icon && iconPosition === "right" && (
             <div
