@@ -3,7 +3,7 @@ type ProductCardProps = {
   title: string;
   price: number;
   description: string;
-  badge: string;
+  badge?: string;
   className?: string;
 };
 

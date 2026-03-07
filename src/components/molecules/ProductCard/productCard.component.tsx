@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Image from "next/image";
 
@@ -20,16 +20,19 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
   badge,
   image,
 }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <div className="product__card--container">
       <Card>
         <div className="card__image-container">
-          {image ? (
+          {image && !imgError ? (
             <Image
               src={image}
-              alt="Product Image"
+              alt={title}
               fill
-              style={{ objectFit: "fill" }}
+              style={{ objectFit: "cover" }}
+              onError={() => setImgError(true)}
             />
           ) : (
             <span className="card__emoji">🥗</span>
@@ -56,7 +59,7 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
             {description}
           </Typography>
 
-          <Chip title={badge} size="small" />
+          {badge && <Chip title={badge} size="small" />}
         </div>
       </Card>
       <style jsx>{ProductCardStyles}</style>
