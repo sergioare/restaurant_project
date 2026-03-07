@@ -7,6 +7,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Avatar, Divider } from "@mui/material";
 import Link from "next/link";
 
+import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
 import { useAppContext } from "@/context/appContext";
 import { theme } from "@/utils/ThemeProvider";
@@ -36,12 +37,12 @@ const HeaderComponent = () => {
               <div>
                 <Typography
                   variant="h5"
-                  weight="semibold"
+                  weight="bold"
                   color={colors.primary[900]}
                 >
                   Sun Fu Wok
                 </Typography>
-                <Typography variant="p2" color={colors.gray[500]}>
+                <Typography variant="p2" color={colors.primary[400]}>
                   Fresh • Bold • Made to Order
                 </Typography>
               </div>
@@ -49,13 +50,19 @@ const HeaderComponent = () => {
           </Link>
 
           <div className="navbar__right">
-            <ShoppingCartOutlinedIcon
-              style={{
-                color: colors.gray[400],
-                width: 20,
-                height: 20,
-              }}
-            />
+            <Button
+              variant="outlined"
+              size="medium"
+              icon={
+                <ShoppingCartOutlinedIcon
+                  style={{
+                    color: colors.gray[400],
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              }
+            ></Button>
 
             <Divider orientation="vertical" flexItem />
             <Avatar
