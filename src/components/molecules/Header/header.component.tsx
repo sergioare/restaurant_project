@@ -1,10 +1,10 @@
 "use client";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import FoodBankOutlinedIcon from "@mui/icons-material/FoodBankOutlined";
 import ArrowDown from "@mui/icons-material/KeyboardArrowDownOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import { Avatar, Divider } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/atoms/Button";
@@ -26,12 +26,11 @@ const HeaderComponent = () => {
           <Link href="/" passHref>
             <div className="navbar__branding">
               <div className="navbar__icon">
-                <FoodBankOutlinedIcon
-                  style={{
-                    color: colors.buttons.orange,
-                    width: 40,
-                    height: 40,
-                  }}
+                <Image
+                  src="/sun_ku_wok_logo.svg"
+                  alt="logo"
+                  fill
+                  style={{ objectFit: "cover" }}
                 />
               </div>
               <div>

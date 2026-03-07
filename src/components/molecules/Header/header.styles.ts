@@ -28,13 +28,15 @@ const HeaderStyles = css`
   .navbar__branding {
     display: flex;
     align-items: center;
-    justify-content: center;
     flex-direction: row;
     gap: 1rem;
   }
   .navbar__icon {
+    position: relative;
+    width: 3.5rem;
+    height: 3.5rem;
+    flex-shrink: 0;
     cursor: pointer;
-
     border-radius: 0.5rem;
     display: flex;
     align-items: center;
