@@ -12,7 +12,7 @@ export const TypographyLocalStyles = css`
   }
 
   .lib > :global(.base) {
-    font-family: "${fontFamily}", "PlayFair Display", sans-serif;
+    font-family: "${fontFamily}", "PlayFair Display", "Dm Sans", sans-serif;
     margin: 0;
   }
 
@@ -71,12 +71,14 @@ export const TypographyLocalStyles = css`
     font-weight: ${regular};
   }
   .lib > :global(.p2) {
+    font-family: "DM Sans", sans-serif;
     font-size: 0.875rem;
     line-height: 1.125rem;
     font-weight: ${regular};
   }
 
   .lib > :global(.p3) {
+    font-family: "DM Sans", sans-serif;
     font-size: 0.75rem;
     line-height: 1rem;
     font-weight: ${regular};

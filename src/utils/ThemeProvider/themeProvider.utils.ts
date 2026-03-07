@@ -21,7 +21,7 @@ export const getColors = () => {
 };
 
 export const getTypography = () => {
-  const fontFamily = `'${theme.typography.name}', Playfair Display, sans-serif`;
+  const fontFamily = `'${theme.typography.name}', Playfair Display, Dm Sans, sans-serif`;
 
   const weights = Object.entries(theme.typography.weight);
   const mappedWeights = weights.map<CssVariable>(([name, value]) => [

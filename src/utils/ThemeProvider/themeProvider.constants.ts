@@ -1,6 +1,6 @@
 const typography = {
-  name: "Playfair Display",
-  src: "https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap",
+  name: "Playfair Display , DM Sans",
+  src: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap",
   weight: {
     regular: "400",
     medium: "500",
@@ -11,7 +11,7 @@ const typography = {
 
 const colors = {
   buttons: {
-    orange: "#EF4E28",
+    orange: "#e64d19",
     yellow: "#F3B52A",
   },
 
@@ -19,6 +19,7 @@ const colors = {
     100: "#FDFBF9",
     200: "#f3f4f6",
     300: "#F2EDE4",
+    400: "#8c7b73",
     900: "#1A1A1A",
   },
 
