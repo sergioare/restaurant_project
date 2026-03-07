@@ -16,11 +16,17 @@ const colors = {
   },
 
   primary: {
+    50: "#ffffff",
     100: "#FDFBF9",
     200: "#f3f4f6",
     300: "#F2EDE4",
     400: "#8c7b73",
-    900: "#1A1A1A",
+    800: "#372b25",
+    900: "#251d18",
+  },
+
+  chips: {
+    custom: "#f1ebe4",
   },
 
   gray: {
