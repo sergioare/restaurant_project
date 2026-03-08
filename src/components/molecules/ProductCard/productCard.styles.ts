@@ -7,6 +7,7 @@ const { colors } = theme;
 const ProductCardStyles = css`
   .product__card--container {
     max-width: 26.7rem;
+    height: 100%;
   }
 
   .card__image-container {

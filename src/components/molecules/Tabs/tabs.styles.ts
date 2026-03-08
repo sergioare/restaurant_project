@@ -10,7 +10,7 @@ const TabsStyles = css`
     background-color: transparent;
     padding: 0.25rem;
     justify-content: space-between;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   .tabs-container :global(.active__tabs) {

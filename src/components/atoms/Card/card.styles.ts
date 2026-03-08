@@ -13,11 +13,13 @@ const CardStyles = css`
     width: 100%;
     cursor: pointer;
     overflow: hidden;
+    height: 100%;
   }
 
   .card--default {
     border: 1px solid ${colors.gray[200]};
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    height: 100%;
   }
 
   .card--outlined {
