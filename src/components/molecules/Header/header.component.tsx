@@ -10,6 +10,7 @@ import Link from "next/link";
 import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
 import { useAppContext } from "@/context/appContext";
+import useCartStore from "@/store/cart/cart.store";
 import { theme } from "@/utils/ThemeProvider";
 
 import HeaderStyles from "./header.styles";
@@ -18,6 +19,8 @@ const { colors } = theme;
 
 const HeaderComponent = () => {
   const { user } = useAppContext();
+  const toggleCart = useCartStore((s) => s.toggleCart);
+  const isCartOpen = useCartStore((s) => s.isOpen);
 
   return (
     <>
@@ -52,15 +55,17 @@ const HeaderComponent = () => {
             <Button
               variant="outlined"
               size="medium"
+              className={`${isCartOpen ? "active__cart" : ""}`}
               icon={
                 <ShoppingCartOutlinedIcon
                   style={{
-                    color: colors.gray[400],
+                    color: isCartOpen ? colors.primary[100] : colors.gray[400],
                     width: 20,
                     height: 20,
                   }}
                 />
               }
+              onClick={toggleCart}
             ></Button>
 
             <Divider orientation="vertical" flexItem />

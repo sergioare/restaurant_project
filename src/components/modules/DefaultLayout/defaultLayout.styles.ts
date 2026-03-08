@@ -17,6 +17,7 @@ export const DefaultLayoutLocalStyles = css`
     padding: 1rem 1rem 4rem 1rem;
     margin: 0 auto;
     overflow: hidden;
+    position: relative;
   }
 
   @media screen and (min-width: ${mediaQueries.tablet}) {

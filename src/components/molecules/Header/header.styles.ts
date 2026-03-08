@@ -57,7 +57,10 @@ const HeaderStyles = css`
   .navbar__right__menu--user {
     color: ${colors.primary[100]};
   }
-  .thumb {
+
+  .navbar__right :global(.active__cart) {
+    background-color: ${colors.buttons.orange};
+    border-radius: 0.5rem;
   }
 `;
 export default HeaderStyles;
