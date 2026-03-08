@@ -5,10 +5,10 @@ import { Category, Product } from "@/services/models/product";
 import type { ProductState, ProductActions, SortBy } from "./products.model";
 import { selectProducts } from "./products.selectors";
 
-const MENU_MOCK: Product[] = [
+export const MENU_MOCK: Product[] = [
   {
     id: "eb0bcf16-b366-42ae-a9ce-148cc4499405",
-    title: "Signature Bacon Burger",
+    name: "Signature Bacon Burger",
     price: 12.5,
     priceInCents: 1250,
     description:
@@ -33,12 +33,14 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:14:45Z",
       createdBy: "admin_01",
       isActive: true,
-      isFeatured: true,
+      isCustomizable: true,
+      customizationId: "eb423a5f-0c4b-4e7a-a503-a2dffb764881",
+      stock: 10,
     },
   },
   {
     id: "85cc5cf1-f06f-4db9-9f8e-3bd77fa89665",
-    title: "Extreme Pepperoni Pizza",
+    name: "Extreme Pepperoni Pizza",
     price: 18.0,
     priceInCents: 1800,
     description:
@@ -60,12 +62,13 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:15:00Z",
       createdBy: "admin_01",
       isActive: true,
-      isFeatured: false,
+      isCustomizable: false,
+      stock: 20,
     },
   },
   {
     id: "38ce6017-fe22-4bc6-af98-b3eec84c03cf",
-    title: "Crunchy Chicken Wrap",
+    name: "Crunchy Chicken Wrap",
     price: 9.9,
     priceInCents: 990,
     description:
@@ -90,12 +93,14 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:16:10Z",
       createdBy: "admin_02",
       isActive: true,
-      isFeatured: true,
+      isCustomizable: true,
+      customizationId: "7d24168a-99c0-4deb-a835-0a7015728b19",
+      stock: 5,
     },
   },
   {
     id: "bb24135f-ca9e-44f5-a5f3-875a0cd2a894",
-    title: "BBQ Ribs Platter",
+    name: "BBQ Ribs Platter",
     price: 22.0,
     priceInCents: 2200,
     description:
@@ -117,12 +122,13 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:17:25Z",
       createdBy: "admin_01",
       isActive: true,
-      isFeatured: false,
+      isCustomizable: false,
+      stock: 15,
     },
   },
   {
     id: "b621b806-9ab1-4508-9519-24c0c39f645f",
-    title: "Al Pastor Style Tacos",
+    name: "Al Pastor Style Tacos",
     price: 11.5,
     priceInCents: 1150,
     description:
@@ -144,12 +150,13 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:18:40Z",
       createdBy: "admin_02",
       isActive: true,
-      isFeatured: false,
+      isCustomizable: false,
+      stock: 7,
     },
   },
   {
     id: "2bf46b3e-626e-418d-b65a-85a403a93f0f",
-    title: "Loaded Cheese Fries",
+    name: "Loaded Cheese Fries",
     price: 7.5,
     priceInCents: 750,
     description:
@@ -171,12 +178,13 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:19:55Z",
       createdBy: "admin_01",
       isActive: true,
-      isFeatured: false,
+      isCustomizable: false,
+      stock: 12,
     },
   },
   {
     id: "9aa4d5ab-1f9e-4155-87f3-9d5f25c68ce6",
-    title: "Veggie Falafel Burger",
+    name: "Veggie Falafel Burger",
     price: 10.5,
     priceInCents: 1050,
     description:
@@ -198,7 +206,8 @@ const MENU_MOCK: Product[] = [
       updatedAt: "2026-03-06T19:21:05Z",
       createdBy: "admin_02",
       isActive: true,
-      isFeatured: false,
+      isCustomizable: false,
+      stock: 18,
     },
   },
 ];

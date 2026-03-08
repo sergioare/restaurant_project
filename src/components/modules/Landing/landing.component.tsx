@@ -6,7 +6,6 @@ import { Typography } from "@/components/atoms/Typography";
 import { ProductCard } from "@/components/molecules/ProductCard";
 import Tabs from "@/components/molecules/Tabs";
 import useProductStore from "@/store/products/products.store";
-import { theme } from "@/utils/ThemeProvider";
 
 import LandingStyles from "./landing.styles";
 import { foodTabs } from "./landing.utils";
@@ -15,8 +14,6 @@ type LandingProps = {
   searchInput: CustomInputProps;
   selectProps: SelectProps;
 };
-
-const { colors } = theme;
 
 const LandingComponent = ({ searchInput, selectProps }: LandingProps) => {
   const activeCategory = useProductStore((s) => s.activeCategory);
@@ -51,14 +48,13 @@ const LandingComponent = ({ searchInput, selectProps }: LandingProps) => {
           <ProductCard
             key={product.id}
             image={product.image}
-            title={product.title}
+            name={product.name}
             price={product.price}
             description={product.description}
             badge={product.badge}
           />
         ))}
       </div>
-
       <style jsx>{LandingStyles}</style>
     </>
   );

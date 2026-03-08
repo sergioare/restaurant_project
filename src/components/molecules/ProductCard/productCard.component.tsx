@@ -14,7 +14,7 @@ import ProductCardStyles from "./productCard.styles";
 const { colors } = theme;
 
 export const ProductCardComponent: React.FC<ProductCardProps> = ({
-  title,
+  name,
   price,
   description,
   badge,
@@ -29,7 +29,7 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
           {image && !imgError ? (
             <Image
               src={image}
-              alt={title}
+              alt={name}
               fill
               style={{ objectFit: "cover" }}
               onError={() => setImgError(true)}
@@ -41,7 +41,7 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
 
         <div className="card__body">
           <div className="card__header-row">
-            <Typography variant="h6">{title}</Typography>
+            <Typography variant="h6">{name}</Typography>
             <Typography
               variant="p2"
               weight="bold"

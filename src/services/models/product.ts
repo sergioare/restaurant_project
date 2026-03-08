@@ -5,7 +5,9 @@ type Metadata = {
   updatedAt: string;
   createdBy: string;
   isActive: boolean;
-  isFeatured: boolean;
+  stock: number;
+  isCustomizable: boolean;
+  customizationId?: string;
 };
 
 type Stats = {
@@ -21,7 +23,7 @@ type Promotions = {
 
 type Product = {
   id: string;
-  title: string;
+  name: string;
   price: number;
   priceInCents: number;
   description: string;

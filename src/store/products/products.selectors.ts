@@ -12,7 +12,7 @@ const filterProductsBySearch = (
 
   return products.filter((product) => {
     const match =
-      includesSearchTerm(product.title, searchTerm) ||
+      includesSearchTerm(product.name, searchTerm) ||
       includesSearchTerm(product.tags, searchTerm) ||
       includesSearchTerm(product.category, searchTerm);
 

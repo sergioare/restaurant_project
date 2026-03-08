@@ -8,7 +8,7 @@ export const sortProducts = (
 
   switch (sortBy) {
     case "name":
-      return sorted.sort((a, b) => a.title.localeCompare(b.title));
+      return sorted.sort((a, b) => a.name.localeCompare(b.name));
 
     case "category":
       return sorted.sort((a, b) => a.category.localeCompare(b.category));

@@ -25,8 +25,8 @@ const LandingContainer = () => {
   const options = useMemo(() => {
     return paginatedProducts.map((product) => ({
       id: product.id,
-      label: product.title,
-      value: product.title,
+      label: product.name,
+      value: product.name,
     }));
   }, [paginatedProducts]);
 
