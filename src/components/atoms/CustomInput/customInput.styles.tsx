@@ -16,7 +16,7 @@ export const CustomInputStyles = css`
     min-width: 16.5rem;
     height: 3rem;
     padding: 0.5rem 0.75rem;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     border: 1.5px solid ${colors.gray[200]};
     outline: none;
     font-size: 0.875rem;
@@ -100,13 +100,13 @@ export const CustomInputStyles = css`
     box-sizing: border-box;
     transition: background-color 0.1s ease-out;
     display: block;
-    font-family: inherit;
+    font-family: "DM Sans", sans-serif;
     font-weight: 400;
   }
 
   .input__dropdown :global(.input__dropdown--option:hover) {
     background-color: ${colors.buttons.orange};
-    color: ${colors.primary[800]};
+    color: white;
     cursor: pointer;
   }
 

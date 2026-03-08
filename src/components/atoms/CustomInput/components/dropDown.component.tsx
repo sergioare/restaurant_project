@@ -37,7 +37,7 @@ const RenderDropdownContent = ({
     ));
   }
 
-  return <div className="input__dropdown--empty">Sin resultados</div>;
+  return <div className="input__dropdown--empty">No results found</div>;
 };
 
 export { RenderDropdownContent };
