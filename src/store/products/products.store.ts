@@ -182,7 +182,7 @@ const MENU_MOCK: Product[] = [
     description:
       "Spiced chickpea patty, roasted pepper hummus, fresh arugula, and red onion on a toasted whole grain bun.",
     image:
-      "https://images.unsplash.com/photo-1525059337994-6f2a1311b4d4?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=800&q=80",
     category: "burgers",
     sku: "FK-BUR-007",
     tags: ["vegetarian", "healthy", "middle-eastern"],
