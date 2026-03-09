@@ -13,6 +13,7 @@ type ProductState = {
   searchTerm: string;
   selectedProduct: Product | null;
   activeCategory: Category | "all";
+  isProductDetailOpen: boolean;
 };
 
 type ProductActions = {
@@ -22,6 +23,8 @@ type ProductActions = {
   setSearchTerm: (term: string) => void;
   setSelectedProduct: (product: Product | null) => void;
   setActiveCategory: (category: Category | "all") => void;
+  toggleProductDetail: () => void;
+  setIsProductDetailOpen: (open: boolean) => void;
 };
 
 export type { ProductState, ProductActions, SortBy, Product };
