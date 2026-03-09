@@ -1,4 +1,6 @@
 import { CartItem } from "./cart.model";
+import { Timestamp, FieldValue } from "firebase-admin/firestore";
+import { CustomerType, OrderStatus } from "./order.model";
 
 type EventType =
   | "CART_ITEM_ADDED"
@@ -11,26 +13,24 @@ type EventType =
 
 type OrderEvent = {
   eventId: string; // UUID
-  timestamp: string; // ISO 8601
+  timestamp: FirestoreTimestamp; // ISO 8601
   orderId: string;
-  userId: string; // mock user
+  userId: string;
   type: EventType;
   source: "web" | "api" | "worker";
   correlationId: string;
   payload: {
+    customerType?: CustomerType;
+    email?: string;
     items?: CartItem[];
     totalInCents?: number;
     reason?: string;
+    newStatus?: OrderStatus;
+    previousStatus?: OrderStatus;
     [key: string]: unknown;
   };
 };
 
-type Order = {
-  orderId: string;
-  userId: string;
-  status: "PENDING" | "ORDER_PLACED" | "COMPLETED" | "CANCELLED";
-  totalCents: number;
-  createdAt: string;
-};
+type FirestoreTimestamp = Timestamp | FieldValue;
 
-export { EventType, OrderEvent, Order };
+export { EventType, OrderEvent, FirestoreTimestamp };
