@@ -7,6 +7,7 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
@@ -28,7 +29,14 @@ const ShoppingCartComponent = () => {
     removeFromCart,
   } = useCartStore();
 
+  const router = useRouter();
   const handleClose = () => setIsOpen(false);
+
+  const handleCheckout = () => {
+    setIsOpen(false);
+    router.push("/checkout");
+  };
+
   return (
     <>
       <div
@@ -141,7 +149,12 @@ const ShoppingCartComponent = () => {
                 {formatPriceFromCents(totalCart.subtotal)}
               </Typography>
             </div>
-            <Button variant="contained" fullWidth size="large">
+            <Button
+              variant="contained"
+              fullWidth
+              size="large"
+              onClick={handleCheckout}
+            >
               <Typography variant="p2" weight="bold">
                 Checkout
               </Typography>

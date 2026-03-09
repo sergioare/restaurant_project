@@ -71,7 +71,7 @@ const ShoppingCartStyles = css`
     flex: 1;
     padding-right: 1.5rem;
   }
-  .cart__item-options {
+  /* .cart__item-options {
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -79,12 +79,13 @@ const ShoppingCartStyles = css`
     text-overflow: ellipsis;
 
     line-height: 1.2;
-  }
+  } */
   .cart__item-quantity {
     display: flex;
     align-items: flex-end;
     gap: 1rem;
     flex-direction: column;
+    justify-content: space-between;
   }
   .quantity__selector--buttons {
     display: flex;
