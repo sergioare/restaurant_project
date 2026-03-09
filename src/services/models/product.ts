@@ -37,4 +37,27 @@ type Product = {
   metadata: Metadata;
 };
 
-export type { Product, Category };
+type CustomizationType = "single" | "multiple";
+
+type CustomOption = {
+  id: string;
+  name: string;
+  priceInCents: number;
+};
+
+type CustomSection = {
+  id: string;
+  title: string;
+  type: CustomizationType;
+  minOptions?: number;
+  maxOptions?: number;
+  options: CustomOption[];
+};
+
+type ProductCustomization = {
+  id: string;
+  productId: string;
+  sections: CustomSection[];
+};
+
+export type { Product, Category, ProductCustomization, CustomSection };
