@@ -1,14 +1,10 @@
 import { Router } from "express";
-import { Product, ProductCustomization } from "../models/cart.model";
+import * as ProductController from "../controllers/products/products.controller";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json([] as Product[]);
-});
+router.get("/", ProductController.getProducts);
 
-router.get("/customizations/:productId", (req, res) => {
-  res.status(200).json({} as ProductCustomization);
-});
+router.get("/customizations/:productId", ProductController.getCustomizations);
 
 export default router;
