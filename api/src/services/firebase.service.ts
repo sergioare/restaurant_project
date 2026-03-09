@@ -4,5 +4,7 @@ if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-export const db = admin.firestore();
-export const Timestamp = admin.firestore.Timestamp;
+const db = admin.firestore();
+const Timestamp = admin.firestore.FieldValue.serverTimestamp();
+
+export { db, Timestamp };
