@@ -1,32 +1,34 @@
 "use client";
 import React from "react";
 
+import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 
+import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
 import useCartStore from "@/store/cart/cart.store";
+import { getSelectedOptionsText } from "@/store/cart/cart.utils";
+import { formatPriceFromCents } from "@/utils/constants/formatPrice";
+import { theme } from "@/utils/ThemeProvider";
 
 import ShoppingCartStyles from "./shoppingCart.styles";
 
-import { formatPriceFromCents } from "@/store/cart/cart.utils";
-
+const { colors } = theme;
 const ShoppingCartComponent = () => {
   const {
     items,
     isOpen,
     setIsOpen,
-    totalPriceInCents,
+    totalCart,
     updateQuantity,
     removeFromCart,
   } = useCartStore();
 
   const handleClose = () => setIsOpen(false);
-
   return (
     <>
       <div
@@ -36,7 +38,9 @@ const ShoppingCartComponent = () => {
 
       <div className={`cart__sidebar ${isOpen ? "is__open" : ""}`}>
         <div className="cart__header">
-          <Typography variant="h6">Tu Carrito ({items.length})</Typography>
+          <Typography variant="h4" color={colors.buttons.orange}>
+            Cart ({items.length})
+          </Typography>
           <IconButton onClick={handleClose} aria-label="close">
             <CloseIcon />
           </IconButton>
@@ -45,53 +49,85 @@ const ShoppingCartComponent = () => {
         <div className="cart__content">
           {items.length === 0 ? (
             <div className="cart__empty">
-              <Typography variant="p1">Tu carrito está vacío</Typography>
+              <Typography variant="p1" color={colors.gray[400]}>
+                Your bag is empty
+              </Typography>
             </div>
           ) : (
             <Stack spacing={3}>
               {items.map((item) => (
-                <Box
-                  key={item.id}
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space__between",
-                    alignItems: "center",
-                  }}
+                <div
+                  className="cart__item--container"
+                  key={item.id + JSON.stringify(item.selectedOptions || {})}
                 >
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="p1">{item.name}</Typography>
-                    <Typography variant="p2" color="text.secondary">
-                      {formatPriceFromCents(item.priceInCents)} c/u
+                  <div className="cart__item-info">
+                    <Typography
+                      variant="p2"
+                      weight="bold"
+                      color={colors.primary[800]}
+                    >
+                      {item.name}
                     </Typography>
-                  </Box>
+                    {item.selectedOptions &&
+                    Object.keys(item.selectedOptions).length > 0 ? (
+                      <div className="cart__item-options">
+                        {getSelectedOptionsText(item)?.map((text, idx) => (
+                          <Typography
+                            key={idx}
+                            variant="p3"
+                            color={colors.buttons.orange}
+                          >
+                            {text}
+                          </Typography>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="cart__item-options">
+                        <Typography variant="p3" color={colors.primary[900]}>
+                          {item.description}
+                        </Typography>
+                      </div>
+                    )}
+                  </div>
 
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      sx={{ minWidth: "32px", p: 0 }}
-                      onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                    >
-                      -
-                    </Button>
-                    <Typography>{item.quantity}</Typography>
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      sx={{ minWidth: "32px", p: 0 }}
-                      onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                    >
-                      +
-                    </Button>
-                    <IconButton
-                      color="error"
-                      onClick={() => removeFromCart(item.id)}
-                      sx={{ ml: 1 }}
-                    >
-                      <DeleteOutlineIcon fontSize="small" />
-                    </IconButton>
-                  </Box>
-                </Box>
+                  <div className="cart__item-quantity">
+                    <Typography variant="p2" color="text.secondary">
+                      {formatPriceFromCents(item.priceInCents)}
+                    </Typography>
+                    <div className="quantity__selector--buttons">
+                      <div className="quantity__selector">
+                        <IconButton
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity - 1)
+                          }
+                          size="small"
+                        >
+                          <RemoveIcon fontSize="small" />
+                        </IconButton>
+
+                        <Typography variant="p2" weight="bold">
+                          {item.quantity}
+                        </Typography>
+
+                        <IconButton
+                          onClick={() =>
+                            updateQuantity(item.id, item.quantity + 1)
+                          }
+                          size="small"
+                        >
+                          <AddIcon fontSize="small" />
+                        </IconButton>
+                      </div>
+                      <IconButton
+                        color="error"
+                        onClick={() => removeFromCart(item.id)}
+                        sx={{ ml: 1 }}
+                      >
+                        <DeleteOutlineIcon fontSize="small" />
+                      </IconButton>
+                    </div>
+                  </div>
+                </div>
               ))}
             </Stack>
           )}
@@ -100,18 +136,15 @@ const ShoppingCartComponent = () => {
         {items.length > 0 && (
           <div className="cart__footer">
             <div className="cart__total__row">
-              <Typography variant="h6">Total</Typography>
-              <Typography variant="h6" color="primary">
-                {formatPriceFromCents(totalPriceInCents)}
+              <Typography variant="h6">Subtotal</Typography>
+              <Typography variant="p2" color="primary">
+                {formatPriceFromCents(totalCart.subtotal)}
               </Typography>
             </div>
-            <Button
-              variant="contained"
-              fullWidth
-              size="large"
-              sx={{ borderRadius: 2, textTransform: "none", fontWeight: "600" }}
-            >
-              Finalizar Compra
+            <Button variant="contained" fullWidth size="large">
+              <Typography variant="p2" weight="bold">
+                Checkout
+              </Typography>
             </Button>
           </div>
         )}
