@@ -1,4 +1,4 @@
-const formatPrice = (price: number) => {
+const formatPrice = (price: number | undefined) => {
   const numericPrice = Number(price);
 
   if (isNaN(numericPrice)) {
@@ -8,4 +8,18 @@ const formatPrice = (price: number) => {
   return `$${numericPrice.toFixed(2)}`;
 };
 
-export { formatPrice };
+const formatPriceFromCents = (
+  priceInCents: number | undefined,
+  currency: string = "USD",
+): string => {
+  const amount = (priceInCents || 0) / 100;
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(amount);
+};
+
+export { formatPrice, formatPriceFromCents };

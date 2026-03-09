@@ -38,6 +38,15 @@ const colors = {
     500: "#4b5563",
     900: "#111827",
   },
+
+  error: {
+    100: "#FFEBEE",
+    200: "#C62828",
+  },
+
+  auxiliary: {
+    gold: "#FFB800",
+  },
 };
 
 const mediaQueries = {
