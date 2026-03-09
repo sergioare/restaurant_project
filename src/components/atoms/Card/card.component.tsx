@@ -7,10 +7,13 @@ export const CardComponent: React.FC<CardProps> = ({
   children,
   className = "",
   variant = "default",
+  onClick = () => {},
 }) => {
   return (
     <>
-      <div className={`card card--${variant} ${className}`}>{children}</div>
+      <div className={`card card--${variant} ${className}`} onClick={onClick}>
+        {children}
+      </div>
       <style jsx>{CardStyles}</style>
     </>
   );
