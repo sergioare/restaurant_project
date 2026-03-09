@@ -50,6 +50,18 @@ export const buttonStyles = css`
   .buttonComponent__white:focus {
     background: transparent;
   }
+
+  .buttonComponent__contained {
+    background: ${colors.buttons.yellow};
+    color: ${colors.primary[100]};
+  }
+  .buttonComponent__contained:hover {
+    background: ${colors.buttons.orange};
+    transform: translateY(-2px);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.1),
+      0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
   .buttonComponent__extra-small {
     height: 1.7rem;
   }
