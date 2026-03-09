@@ -37,13 +37,41 @@ const ProductCardStyles = css`
     padding-top: 1.25rem;
     display: flex;
     flex-direction: column;
+    flex: 1;
     gap: 1rem;
+    justify-content: space-between;
   }
 
   .card__header-row {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
+  }
+  .product__card--footer-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .product__card--rating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .product__card--container :global(.card),
+  .product__card--container :global(.card--default) {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+
+  .product__card--container :global(> div) {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 1;
   }
 `;
 

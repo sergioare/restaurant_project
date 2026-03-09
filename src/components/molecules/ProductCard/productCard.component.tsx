@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import StarIcon from "@mui/icons-material/Star";
 import Image from "next/image";
 
 import { Card } from "@/components/atoms/Card";
@@ -10,7 +11,6 @@ import { theme } from "@/utils/ThemeProvider";
 
 import { ProductCardProps } from "./productCard.modules";
 import ProductCardStyles from "./productCard.styles";
-
 const { colors } = theme;
 
 export const ProductCardComponent: React.FC<ProductCardProps> = ({
@@ -19,12 +19,14 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
   description,
   badge,
   image,
+  rating,
+  handleClick,
 }) => {
   const [imgError, setImgError] = useState(false);
 
   return (
     <div className="product__card--container">
-      <Card>
+      <Card onClick={handleClick}>
         <div className="card__image-container">
           {image && !imgError ? (
             <Image
@@ -59,7 +61,22 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
             {description}
           </Typography>
 
-          {badge && <Chip title={badge} size="small" />}
+          <div className="product__card--footer-section">
+            <div className="product__card--rating">
+              <StarIcon
+                fontSize="small"
+                sx={{ color: colors.auxiliary.gold }}
+              />
+              <Typography
+                variant="p2"
+                color={colors.primary[400]}
+                weight="semibold"
+              >
+                {rating}
+              </Typography>
+            </div>
+            {badge && <Chip title={badge} size="small" />}
+          </div>
         </div>
       </Card>
       <style jsx>{ProductCardStyles}</style>

@@ -4,7 +4,9 @@ type ProductCardProps = {
   price: number;
   description: string;
   badge?: string;
+  rating: number;
   className?: string;
+  handleClick?: () => void;
 };
 
 export type { ProductCardProps };
