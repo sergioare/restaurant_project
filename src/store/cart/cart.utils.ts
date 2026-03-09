@@ -1,25 +1,57 @@
-import { CartItem } from "./cart.model";
+import { CartConfig, CartItem } from "./cart.model";
+import { CUSTOMIZATIONS_MOCK } from "../products/products.utils";
 
-const calculateTotals = (items: CartItem[]) => ({
-  totalItems: items.reduce((acc, item) => acc + item.quantity, 0),
-  totalPriceInCents: items.reduce(
-    (acc, item) => acc + item.priceInCents * item.quantity,
-    0,
-  ),
-});
+const calculateTotals = (items: CartItem[], config: CartConfig) => {
+  const { serviceFeePercentage, isServiceFeeEnabled, taxRate } = config;
 
-const formatPriceFromCents = (
-  priceInCents: number,
-  currency: string = "USD",
-): string => {
-  const amount = (priceInCents || 0) / 100;
+  const subtotal = items.reduce((acc, item) => {
+    return acc + item.priceInCents * item.quantity;
+  }, 0);
 
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: currency,
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
+  const tax = Math.round(subtotal * taxRate);
+
+  const serviceFee =
+    isServiceFeeEnabled && items.length > 0
+      ? Math.round(subtotal * serviceFeePercentage)
+      : 0;
+
+  const total = subtotal + tax + serviceFee;
+
+  return {
+    subtotal,
+    tax,
+    serviceFee,
+    total,
+  };
 };
 
-export { calculateTotals, formatPriceFromCents };
+const getSelectedOptionsText = (item: CartItem) => {
+  if (!item.selectedOptions) return null;
+
+  const customization = CUSTOMIZATIONS_MOCK.find(
+    (c) => c.id === item.metadata?.customizationId,
+  );
+
+  if (!customization) return null;
+
+  const summary: string[] = [];
+
+  customization.sections.forEach((section) => {
+    const selected = item.selectedOptions![section.id];
+    if (!selected) return;
+
+    if (typeof selected === "string") {
+      const option = section.options.find((o) => o.id === selected);
+      if (option) summary.push(`${section.title}: ${option.name}`);
+    } else if (Array.isArray(selected) && selected.length > 0) {
+      const names = section.options
+        .filter((o) => selected.includes(o.id))
+        .map((o) => o.name);
+      summary.push(`${section.title}: ${names.join(", ")}`);
+    }
+  });
+
+  return summary;
+};
+
+export { calculateTotals, getSelectedOptionsText };
