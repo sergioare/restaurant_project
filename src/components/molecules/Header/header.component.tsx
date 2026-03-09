@@ -19,8 +19,9 @@ const { colors } = theme;
 
 const HeaderComponent = () => {
   const { user } = useAppContext();
-  const toggleCart = useCartStore((s) => s.toggleCart);
-  const isCartOpen = useCartStore((s) => s.isOpen);
+  const { items, toggleCart, isOpen: isCartOpen } = useCartStore();
+
+  const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
     <>
@@ -57,13 +58,24 @@ const HeaderComponent = () => {
               size="medium"
               className={`${isCartOpen ? "active__cart" : ""}`}
               icon={
-                <ShoppingCartOutlinedIcon
-                  style={{
-                    color: isCartOpen ? colors.primary[100] : colors.gray[400],
-                    width: 20,
-                    height: 20,
-                  }}
-                />
+                <div className="cart__icon-wrapper">
+                  <ShoppingCartOutlinedIcon
+                    style={{
+                      color: isCartOpen
+                        ? colors.primary[100]
+                        : colors.gray[400],
+                      width: 20,
+                      height: 20,
+                    }}
+                  />
+                  {totalItems > 0 && (
+                    <span className="cart__badge">
+                      <Typography variant="p3" color={colors.primary[50]}>
+                        {totalItems}
+                      </Typography>
+                    </span>
+                  )}
+                </div>
               }
               onClick={toggleCart}
             ></Button>

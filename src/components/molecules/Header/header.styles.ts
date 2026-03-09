@@ -62,5 +62,28 @@ const HeaderStyles = css`
     background-color: ${colors.buttons.orange};
     border-radius: 0.5rem;
   }
+
+  .cart__icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cart__badge {
+    position: absolute;
+    bottom: -1rem;
+    right: -1rem;
+    background-color: ${colors.buttons.orange};
+    min-width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+    border: 2px solid ${colors.primary[50]};
+    pointer-events: none;
+  }
 `;
 export default HeaderStyles;
