@@ -3,8 +3,10 @@ import { CustomInputProps } from "@/components/atoms/CustomInput/customInput.mod
 import Select from "@/components/atoms/Select";
 import { SelectProps } from "@/components/atoms/Select/select.model";
 import { Typography } from "@/components/atoms/Typography";
+import DetailProduct from "@/components/molecules/DetailProduct";
 import { ProductCard } from "@/components/molecules/ProductCard";
 import Tabs from "@/components/molecules/Tabs";
+import { Product } from "@/services/models/product";
 import useProductStore from "@/store/products/products.store";
 
 import LandingStyles from "./landing.styles";
@@ -16,9 +18,19 @@ type LandingProps = {
 };
 
 const LandingComponent = ({ searchInput, selectProps }: LandingProps) => {
-  const activeCategory = useProductStore((s) => s.activeCategory);
-  const setActiveCategory = useProductStore((s) => s.setActiveCategory);
-  const paginatedProducts = useProductStore((s) => s.paginatedProducts);
+  const {
+    toggleProductDetail,
+    setSelectedProduct,
+    activeCategory,
+    setActiveCategory,
+    paginatedProducts,
+    selectedProduct,
+  } = useProductStore();
+
+  const handleProductClick = (product: Product) => {
+    setSelectedProduct(product);
+    toggleProductDetail();
+  };
 
   return (
     <>
@@ -52,9 +64,12 @@ const LandingComponent = ({ searchInput, selectProps }: LandingProps) => {
             price={product.price}
             description={product.description}
             badge={product.badge}
+            rating={product.stats.rating}
+            handleClick={() => handleProductClick(product)}
           />
         ))}
       </div>
+      <DetailProduct key={selectedProduct?.id} />
       <style jsx>{LandingStyles}</style>
     </>
   );

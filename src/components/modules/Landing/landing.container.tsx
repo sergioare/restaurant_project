@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/SearchOutlined";
 
 import { CustomInputProps } from "@/components/atoms/CustomInput/customInput.model";
 import { SelectProps } from "@/components/atoms/Select/select.model";
+import { SortBy } from "@/store/products/products.model";
 import useProductStore from "@/store/products/products.store";
 import { theme } from "@/utils/ThemeProvider";
 
@@ -18,6 +19,7 @@ const LandingContainer = () => {
   const setSearchTerm = useProductStore((state) => state.setSearchTerm);
   const fetchProducts = useProductStore((s) => s.fetchProducts);
   const paginatedProducts = useProductStore((s) => s.paginatedProducts);
+  const setSortBy = useProductStore((s) => s.setSortBy);
 
   const [searchLocal, setSearchLocal] = useState(searchTerm);
   const [sortLocalBy, setSortLocalBy] = useState("rating");
@@ -49,7 +51,7 @@ const LandingContainer = () => {
     iconPosition: "right",
     icon: <ArrowDropDownIcon sx={{ color: colors.gray[300] }} />,
     onOptionSelect: (option) => {
-      console.log(option);
+      setSortBy(option.value as SortBy);
     },
   };
 
