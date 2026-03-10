@@ -2,6 +2,7 @@ type EventType =
   | "CART_ITEM_ADDED"
   | "CART_ITEM_UPDATED"
   | "CART_ITEM_REMOVED"
+  | "STOCK_LIMIT_REACHED"
   | "ORDER_PLACED";
 
 type AppEvent = {

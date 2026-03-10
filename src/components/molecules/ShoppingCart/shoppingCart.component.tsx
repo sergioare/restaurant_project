@@ -11,8 +11,10 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
+import { CartItem } from "@/store/cart/cart.model";
 import useCartStore from "@/store/cart/cart.store";
 import { getSelectedOptionsText } from "@/store/cart/cart.utils";
+import useEventStore from "@/store/events/events.store";
 import useProductStore from "@/store/products/products.store";
 import { formatPriceFromCents } from "@/utils/constants/formatPrice";
 import { theme } from "@/utils/ThemeProvider";
@@ -30,6 +32,8 @@ const ShoppingCartComponent = () => {
     removeFromCart,
   } = useCartStore();
 
+  const { addEvent } = useEventStore();
+
   const { customizations } = useProductStore();
 
   const router = useRouter();
@@ -38,6 +42,60 @@ const ShoppingCartComponent = () => {
   const handleCheckout = () => {
     setIsOpen(false);
     router.push("/checkout");
+  };
+
+  const handleUpdateQuantity = (item: CartItem, newQuantity: number) => {
+    const stockAvailable = item.metadata?.stock ?? 0;
+
+    const eventPayload = {
+      name: item.name,
+      quantity: newQuantity,
+      selectedOptions: item.selectedOptions,
+      basePrice: item.priceInCents,
+      totalInCents: item.priceInCents * newQuantity,
+      productId: item.id,
+    };
+    if (newQuantity > item.quantity && newQuantity > stockAvailable) {
+      addEvent("STOCK_LIMIT_REACHED", {
+        ...eventPayload,
+        attemptedQuantity: newQuantity,
+        currentStock: stockAvailable,
+        sku: item.sku,
+      });
+
+      return;
+    }
+
+    if (newQuantity <= 0) {
+      addEvent("CART_ITEM_REMOVED", {
+        ...eventPayload,
+        sku: item.sku,
+        reason: "quantity_zero",
+      });
+    } else {
+      addEvent("CART_ITEM_UPDATED", {
+        oldQuantity: item.quantity,
+        newQuantity,
+        sku: item.sku,
+        reason: "quantity_updated",
+      });
+    }
+
+    updateQuantity(item.id, newQuantity);
+  };
+
+  const handleRemoveFromCart = (item: CartItem) => {
+    addEvent("CART_ITEM_REMOVED", {
+      name: item.name,
+      finalQuantity: item.quantity,
+      selectedOptions: item.selectedOptions,
+      reason: "removed_from_cart",
+      basePrice: item.priceInCents,
+      productId: item.id,
+      sku: item.sku,
+    });
+
+    removeFromCart(item.id);
   };
 
   return (
@@ -111,7 +169,7 @@ const ShoppingCartComponent = () => {
                       <div className="quantity__selector">
                         <IconButton
                           onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
+                            handleUpdateQuantity(item, item.quantity - 1)
                           }
                           size="small"
                         >
@@ -124,7 +182,7 @@ const ShoppingCartComponent = () => {
 
                         <IconButton
                           onClick={() =>
-                            updateQuantity(item.id, item.quantity + 1)
+                            handleUpdateQuantity(item, item.quantity + 1)
                           }
                           size="small"
                         >
@@ -133,7 +191,7 @@ const ShoppingCartComponent = () => {
                       </div>
                       <IconButton
                         color="error"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => handleRemoveFromCart(item)}
                         sx={{ ml: 1 }}
                       >
                         <DeleteOutlineIcon fontSize="small" />

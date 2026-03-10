@@ -86,6 +86,7 @@ const DetailProductComponent = () => {
         selectedOptions,
         basePrice: selectedProduct.priceInCents,
         totalInCents: finalTotalPrice,
+        productId: selectedProduct.id,
       };
       addEvent("CART_ITEM_ADDED", eventPayload);
       setSelectedOptions({});
