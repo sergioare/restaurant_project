@@ -83,7 +83,12 @@ const HeaderComponent = () => {
             <Divider orientation="vertical" flexItem />
             <Avatar
               src={user?.profilePicture}
-              sx={{ width: 40, height: 40, bgcolor: "transparent" }}
+              sx={{
+                width: 40,
+                height: 40,
+                bgcolor: "transparent",
+                cursor: "pointer",
+              }}
             >
               <AccountCircleIcon
                 sx={{
@@ -95,13 +100,23 @@ const HeaderComponent = () => {
             </Avatar>
             <div className="navbar__right__menu">
               <div className="navbar__right__menu--user">
-                <Typography
-                  variant="p2"
-                  color={colors.gray[500]}
-                  weight="semibold"
-                >
-                  {user?.name}
-                </Typography>
+                {!user !== undefined ? (
+                  <Typography
+                    variant="p2"
+                    color={colors.gray[400]}
+                    weight="semibold"
+                  >
+                    Sign in
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="p2"
+                    color={colors.gray[500]}
+                    weight="semibold"
+                  >
+                    {user?.name}
+                  </Typography>
+                )}
               </div>
               <ArrowDown
                 style={{
