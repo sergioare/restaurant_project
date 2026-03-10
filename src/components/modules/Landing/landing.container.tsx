@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/SearchOutlined";
 
 import { CustomInputProps } from "@/components/atoms/CustomInput/customInput.model";
 import { SelectProps } from "@/components/atoms/Select/select.model";
+import Spinner from "@/components/atoms/Spinner/spinner.component";
 import { SortBy } from "@/store/products/products.model";
 import useProductStore from "@/store/products/products.store";
 import { theme } from "@/utils/ThemeProvider";
@@ -66,6 +67,8 @@ const LandingContainer = () => {
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
+
+  if (!paginatedProducts.length) return <Spinner />;
 
   return (
     <LandingComponent searchInput={searchInput} selectProps={selectProps} />

@@ -22,7 +22,6 @@ const HeaderComponent = () => {
   const { items, toggleCart, isOpen: isCartOpen } = useCartStore();
 
   const totalItems = items.reduce((acc, item) => acc + item.quantity, 0);
-
   return (
     <>
       <header className="navbar">
@@ -100,21 +99,21 @@ const HeaderComponent = () => {
             </Avatar>
             <div className="navbar__right__menu">
               <div className="navbar__right__menu--user">
-                {!user !== undefined ? (
-                  <Typography
-                    variant="p2"
-                    color={colors.gray[400]}
-                    weight="semibold"
-                  >
-                    Sign in
-                  </Typography>
-                ) : (
+                {user !== null ? (
                   <Typography
                     variant="p2"
                     color={colors.gray[500]}
                     weight="semibold"
                   >
                     {user?.name}
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="p2"
+                    color={colors.gray[400]}
+                    weight="semibold"
+                  >
+                    Sign in
                   </Typography>
                 )}
               </div>

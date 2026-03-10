@@ -33,6 +33,8 @@ export const ProductCardComponent: React.FC<ProductCardProps> = ({
               src={image}
               alt={name}
               fill
+              sizes="430px"
+              priority
               style={{ objectFit: "cover" }}
               onError={() => setImgError(true)}
             />
