@@ -13,17 +13,14 @@ import { theme } from "@/utils/ThemeProvider";
 
 import RenderButtons from "./components/renderButtons.component";
 import RenderOptions from "./components/renderOptions.component";
+import useDetailProduct from "./detailProduct.hook";
 import DetailProductStyles from "./detailProduct.styles";
 
 const { colors } = theme;
 
 const DetailProductComponent = () => {
-  const {
-    isProductDetailOpen,
-    selectedProduct,
-    setIsProductDetailOpen,
-    customizations,
-  } = useProductStore();
+  const { isProductDetailOpen, selectedProduct, setIsProductDetailOpen } =
+    useProductStore();
 
   const { addToCart, items: cartItems } = useCartStore();
 
@@ -33,6 +30,12 @@ const DetailProductComponent = () => {
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, unknown>
   >({});
+
+  const { calculateExtraPrice, validateCustomizations, currentCustomization } =
+    useDetailProduct({
+      selectedOptions,
+      setError,
+    });
 
   const itemInCart = cartItems.find((item) => item.id === selectedProduct?.id);
   const quantityInCart = itemInCart ? itemInCart.quantity : 0;
@@ -65,38 +68,15 @@ const DetailProductComponent = () => {
     setError(null);
   };
 
-  const currentCustomization = customizations.find(
-    (custom) => custom?.id === selectedProduct?.metadata?.customizationId,
-  );
-
-  const calculateExtraPrice = () => {
-    let extra = 0;
-    if (!currentCustomization) return 0;
-
-    currentCustomization.sections.forEach((section) => {
-      const selected = selectedOptions[section.id];
-      if (!selected) return;
-
-      if (section.type === "single") {
-        const option = section.options.find((o) => o.id === selected);
-        if (option) extra += option.priceInCents;
-      } else {
-        (selected as string[]).forEach((id) => {
-          const option = section.options.find((o) => o.id === id);
-          if (option) extra += option.priceInCents;
-        });
-      }
-    });
-    return extra;
-  };
-
   const totalUnitWeight =
     (selectedProduct?.priceInCents || 0) + calculateExtraPrice();
   const finalTotalPrice = totalUnitWeight * quantity;
 
   const handleAddWithQuantity = () => {
+    if (!validateCustomizations()) return;
     if (selectedProduct) {
       addToCart(selectedProduct, quantity, selectedOptions, totalUnitWeight);
+      setSelectedOptions({});
       handleClose();
     }
   };

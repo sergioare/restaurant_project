@@ -32,13 +32,25 @@ const RenderOptions = ({
         return { ...prev, [sectionId]: optionId };
       } else {
         const current = (prev[sectionId] as string[]) || [];
-        const next = current.includes(optionId)
+        const isSelected = current.includes(optionId);
+
+        if (
+          !isSelected &&
+          section.maxOptions &&
+          current.length >= section.maxOptions
+        ) {
+          return prev;
+        }
+
+        const next = isSelected
           ? current.filter((id) => id !== optionId)
           : [...current, optionId];
+
         return { ...prev, [sectionId]: next };
       }
     });
   };
+
   return (
     <>
       <div className="customize__options-list">
