@@ -1,9 +1,16 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid";
+
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
 import { Typography } from "@/components/atoms/Typography";
+import { useAppContext } from "@/context/appContext";
+import { CheckoutRequest } from "@/services/models/orders";
+import orderService from "@/services/modules/orders";
 import useCartStore from "@/store/cart/cart.store";
+import useEventStore from "@/store/events/events.store";
 import { formatPriceFromCents } from "@/utils/constants/formatPrice";
 import { theme } from "@/utils/ThemeProvider";
 
@@ -19,8 +26,39 @@ const SummaryComponent = () => {
     isServiceFeeEnabled,
     serviceFeePercentage,
     setServiceFeeEnabled,
+    clearCart,
   } = useCartStore();
 
+  const { user } = useAppContext();
+  const { events, clearEvents } = useEventStore();
+
+  const router = useRouter();
+
+  const handlePlaceOrder = async () => {
+    const orderData: CheckoutRequest = {
+      items: items,
+      userId: user?._id ?? "",
+      email: user?.email ?? "",
+      name: user?.name ?? "",
+      phone: `+${user?.diallingCode ?? undefined} ${user?.phoneNumber ?? undefined}`,
+      correlationId: uuidv4(),
+      config: { taxRate, isServiceFeeEnabled, serviceFeePercentage },
+      localEvents: events,
+      customerType: "customer",
+    };
+
+    try {
+      const response = await orderService.createOrder(orderData);
+
+      if (response.orderId) {
+        clearEvents();
+        clearCart();
+        router.push(`/checkout/${response.orderId}`);
+      }
+    } catch (error) {
+      console.error("Error al procesar la orden:", error);
+    }
+  };
   return (
     <>
       <aside className="checkout__sidebar">
@@ -116,6 +154,7 @@ const SummaryComponent = () => {
                 variant="contained"
                 fullWidth
                 disabled={items.length === 0}
+                onClick={handlePlaceOrder}
               >
                 <Typography variant="p2" weight="bold">
                   PLACE ORDER

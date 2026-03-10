@@ -10,7 +10,6 @@ type AppEvent = {
   type: EventType;
   payload: Record<string, unknown>;
   source: "web" | "api" | "worker";
-  timestamp: string;
 };
 
 type EventState = {

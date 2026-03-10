@@ -6,7 +6,7 @@ export const getOrderTimeline = async (
 ): Promise<OrderEvent[]> => {
   try {
     const eventsSnapshot = await db
-      .collection("order_events")
+      .collection("orders")
       .where("orderId", "==", orderId)
       .orderBy("timestamp", "asc")
       .get();
@@ -24,7 +24,7 @@ export const getOrderTimeline = async (
         type: data.type,
         source: data.source,
         correlationId: data.correlationId,
-        timestamp: data.timestamp,
+        timestamp: data.timestamp.toDate(),
         payload: data.payload,
       } as OrderEvent;
     });

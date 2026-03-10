@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/atoms/Card";
 import { Input } from "@/components/atoms/CustomInput";
 import { Typography } from "@/components/atoms/Typography";
+import { useAppContext } from "@/context/appContext";
 import { getSoonestAvailableDate } from "@/utils/constants/time";
 import { theme } from "@/utils/ThemeProvider";
 
@@ -18,12 +19,14 @@ type UserData = {
 const { colors } = theme;
 
 const PickUpLocation = () => {
+  const { user } = useAppContext();
+
   const [pickupType, setPickupType] = useState<"soonest" | "future">("soonest");
   const [soonestDate, setSoonestDate] = useState(getSoonestAvailableDate());
   const [userData, setUserData] = useState<UserData>({
-    name: undefined,
-    phone: undefined,
-    email: undefined,
+    name: user?.name ?? undefined,
+    phone: `+${user?.diallingCode ?? undefined} ${user?.phoneNumber ?? undefined}`,
+    email: user?.email ?? undefined,
   });
 
   useEffect(() => {

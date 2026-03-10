@@ -74,6 +74,8 @@ export const createOrder = async (
       const enrichedEvents: OrderEvent[] = localEvents.map((event: any) => ({
         ...event,
         userId: finalUserId,
+        correlationId,
+        timestamp: Timestamp.fromDate(event.timestamp),
         source: "web",
       }));
 
