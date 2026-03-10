@@ -1,10 +1,10 @@
 import { create } from "zustand";
 
 import { Category, Product } from "@/services/models/product";
+import productsService from "@/services/modules/products";
 
 import type { ProductState, ProductActions, SortBy } from "./products.model";
 import { selectProducts } from "./products.selectors";
-import { MENU_MOCK } from "./products.utils";
 
 const initialState: ProductState = {
   products: [],
@@ -18,19 +18,23 @@ const initialState: ProductState = {
   selectedProduct: null,
   activeCategory: "all",
   isProductDetailOpen: false,
+  customizations: [],
+  isLoadingCustom: false,
 };
 
-const useProductStore = create<ProductState & ProductActions>((set) => ({
+const useProductStore = create<ProductState & ProductActions>((set, get) => ({
   ...initialState,
 
   fetchProducts: async () => {
     try {
+      if (get().products.length > 0) return;
       set({ isLoading: true });
+      const data = await productsService.getProducts();
 
       set((state) => {
         const nextState = {
           ...state,
-          products: MENU_MOCK,
+          products: data,
           isLoading: false,
         };
 
@@ -135,6 +139,35 @@ const useProductStore = create<ProductState & ProductActions>((set) => ({
   toggleProductDetail: () =>
     set((state) => ({ isProductDetailOpen: !state.isProductDetailOpen })),
   setIsProductDetailOpen: (open: boolean) => set({ isProductDetailOpen: open }),
+
+  fetchCustomization: async (productId: string) => {
+    const alreadyLoaded = get().customizations.some(
+      (c) => c?.productId === productId,
+    );
+
+    if (alreadyLoaded) return;
+    set({ isLoadingCustom: true });
+
+    try {
+      const response = await productsService.getCustomizations(productId);
+
+      if (!response) {
+        set({ isLoadingCustom: false });
+        return;
+      }
+
+      set((state) => ({
+        customizations: [
+          ...state.customizations.filter(Boolean),
+          { ...response },
+        ],
+        isLoadingCustom: false,
+      }));
+    } catch (error) {
+      console.error("Error fetching customizations:", error);
+      set({ isLoadingCustom: false });
+    }
+  },
 }));
 
 export default useProductStore;

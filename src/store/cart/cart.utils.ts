@@ -1,5 +1,6 @@
+import { ProductCustomization } from "@/services/models/product";
+
 import { CartConfig, CartItem } from "./cart.model";
-import { CUSTOMIZATIONS_MOCK } from "../products/products.utils";
 
 const calculateTotals = (items: CartItem[], config: CartConfig) => {
   const { serviceFeePercentage, isServiceFeeEnabled, taxRate } = config;
@@ -25,10 +26,13 @@ const calculateTotals = (items: CartItem[], config: CartConfig) => {
   };
 };
 
-const getSelectedOptionsText = (item: CartItem) => {
+const getSelectedOptionsText = (
+  item: CartItem,
+  customizations: ProductCustomization[],
+) => {
   if (!item.selectedOptions) return null;
 
-  const customization = CUSTOMIZATIONS_MOCK.find(
+  const customization = customizations.find(
     (c) => c.id === item.metadata?.customizationId,
   );
 

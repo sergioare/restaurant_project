@@ -1,4 +1,8 @@
-import { Category, Product } from "@/services/models/product";
+import {
+  Category,
+  Product,
+  ProductCustomization,
+} from "@/services/models/product";
 
 type SortBy = "name" | "category" | "price" | "rating";
 
@@ -14,6 +18,8 @@ type ProductState = {
   selectedProduct: Product | null;
   activeCategory: Category | "all";
   isProductDetailOpen: boolean;
+  customizations: ProductCustomization[];
+  isLoadingCustom: boolean;
 };
 
 type ProductActions = {
@@ -25,6 +31,7 @@ type ProductActions = {
   setActiveCategory: (category: Category | "all") => void;
   toggleProductDetail: () => void;
   setIsProductDetailOpen: (open: boolean) => void;
+  fetchCustomization: (productId: string) => Promise<void>;
 };
 
 export type { ProductState, ProductActions, SortBy, Product };
