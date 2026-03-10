@@ -4,7 +4,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { Product } from "@/services/models/product";
 
 import { CartItem, CartState, CartStore } from "./cart.model";
-import { calculateTotals } from "./cart.utils";
+import { calculateTotals, generateCustomizationHash } from "./cart.utils";
 
 const initialState: CartState = {
   items: [],
@@ -37,23 +37,20 @@ const useCartStore = create<CartStore>()(
         newPriceInCents?: number,
       ) => {
         set((state) => {
-          const optionsString = selectedOptions
-            ? JSON.stringify(selectedOptions)
-            : "";
-          const itemUniqueId = `${product.id}-${optionsString}`;
+          const customizationHash = generateCustomizationHash(
+            product.id,
+            selectedOptions,
+          );
 
-          const existingItem = state.items.find(
-            (item) =>
-              `${item.id}-${JSON.stringify(item.selectedOptions || {})}` ===
-              itemUniqueId,
+          const existingItemIndex = state.items.findIndex(
+            (item) => item.customizationHash === customizationHash,
           );
 
           let newItems: CartItem[];
 
-          if (existingItem) {
-            newItems = state.items.map((item) =>
-              `${item.id}-${JSON.stringify(item.selectedOptions || {})}` ===
-              itemUniqueId
+          if (existingItemIndex > -1) {
+            newItems = state.items.map((item, index) =>
+              index === existingItemIndex
                 ? { ...item, quantity: item.quantity + quantity }
                 : item,
             );
@@ -65,6 +62,7 @@ const useCartStore = create<CartStore>()(
                 priceInCents: newPriceInCents ?? product.priceInCents,
                 quantity,
                 selectedOptions,
+                customizationHash,
               },
             ];
           }
@@ -134,6 +132,57 @@ const useCartStore = create<CartStore>()(
             serviceFeePercentage: percentage,
           }),
         }));
+      },
+
+      editCartItem: (
+        oldHash: string,
+        updatedItem: CartItem,
+        newPriceInCents?: number,
+      ) => {
+        set((state) => {
+          const newHash = generateCustomizationHash(
+            updatedItem.id,
+            updatedItem.selectedOptions,
+          );
+
+          const existingIndex = state.items.findIndex(
+            (i) =>
+              i.customizationHash === newHash &&
+              i.customizationHash !== oldHash,
+          );
+
+          let newItems: CartItem[];
+
+          if (existingIndex > -1) {
+            newItems = state.items
+              .filter((i) => i.customizationHash !== oldHash)
+              .map((item) => {
+                if (item.customizationHash === newHash) {
+                  return {
+                    ...item,
+                    quantity: item.quantity + updatedItem.quantity,
+                    priceInCents: newPriceInCents ?? updatedItem.priceInCents,
+                  };
+                }
+                return item;
+              });
+          } else {
+            newItems = state.items.map((item) =>
+              item.customizationHash === oldHash
+                ? {
+                    ...updatedItem,
+                    customizationHash: newHash,
+                    priceInCents: newPriceInCents ?? updatedItem.priceInCents,
+                  }
+                : item,
+            );
+          }
+          return {
+            ...state,
+            items: newItems,
+            totalCart: calculateTotals(newItems, state),
+          };
+        });
       },
     }),
     {

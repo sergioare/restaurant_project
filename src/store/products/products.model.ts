@@ -20,6 +20,7 @@ type ProductState = {
   isProductDetailOpen: boolean;
   customizations: ProductCustomization[];
   isLoadingCustom: boolean;
+  isEditingProduct: boolean;
 };
 
 type ProductActions = {
@@ -32,6 +33,7 @@ type ProductActions = {
   toggleProductDetail: () => void;
   setIsProductDetailOpen: (open: boolean) => void;
   fetchCustomization: (productId: string) => Promise<void>;
+  setIsEditingProduct: (value: boolean) => void;
 };
 
 export type { ProductState, ProductActions, SortBy, Product };

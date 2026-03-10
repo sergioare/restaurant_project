@@ -20,6 +20,7 @@ const initialState: ProductState = {
   isProductDetailOpen: false,
   customizations: [],
   isLoadingCustom: false,
+  isEditingProduct: false,
 };
 
 const useProductStore = create<ProductState & ProductActions>((set, get) => ({
@@ -167,6 +168,10 @@ const useProductStore = create<ProductState & ProductActions>((set, get) => ({
       console.error("Error fetching customizations:", error);
       set({ isLoadingCustom: false });
     }
+  },
+
+  setIsEditingProduct: (isEditing: boolean) => {
+    set({ isEditingProduct: isEditing });
   },
 }));
 

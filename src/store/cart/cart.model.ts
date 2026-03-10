@@ -3,7 +3,6 @@ import { Product } from "@/services/models/product";
 export type CartItem = Product & {
   quantity: number;
   selectedOptions?: Record<string, unknown>;
-  customizationHash?: string;
 };
 
 export type CartState = CartConfig & {
@@ -28,6 +27,11 @@ export type CartActions = {
   setIsOpen: (open: boolean) => void;
   setServiceFeeEnabled: (enabled: boolean) => void;
   setServiceFeePercentage: (percentage: number) => void;
+  editCartItem: (
+    oldHash: string,
+    item: CartItem,
+    newPriceInCents?: number,
+  ) => void;
 };
 
 type CartConfig = {

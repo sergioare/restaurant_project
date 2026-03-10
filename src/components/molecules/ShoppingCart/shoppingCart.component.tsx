@@ -4,6 +4,7 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import EditIcon from "@mui/icons-material/Edit";
 import RemoveIcon from "@mui/icons-material/Remove";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
@@ -34,7 +35,12 @@ const ShoppingCartComponent = () => {
 
   const { addEvent } = useEventStore();
 
-  const { customizations } = useProductStore();
+  const {
+    customizations,
+    toggleProductDetail,
+    setSelectedProduct,
+    setIsEditingProduct,
+  } = useProductStore();
 
   const router = useRouter();
   const handleClose = () => setIsOpen(false);
@@ -96,6 +102,13 @@ const ShoppingCartComponent = () => {
     });
 
     removeFromCart(item.id);
+  };
+
+  const handleEditCartItem = (item: CartItem) => {
+    setSelectedProduct(item);
+    setIsEditingProduct(true);
+    toggleProductDetail();
+    handleClose();
   };
 
   return (
@@ -162,9 +175,11 @@ const ShoppingCartComponent = () => {
                   </div>
 
                   <div className="cart__item-quantity">
-                    <Typography variant="p2" color="text.secondary">
-                      {formatPriceFromCents(item.priceInCents)}
-                    </Typography>
+                    <div className="cart__item-price">
+                      <Typography variant="p2" color="text.secondary">
+                        {formatPriceFromCents(item.priceInCents)}
+                      </Typography>
+                    </div>
                     <div className="quantity__selector--buttons">
                       <div className="quantity__selector">
                         <IconButton
@@ -192,10 +207,17 @@ const ShoppingCartComponent = () => {
                       <IconButton
                         color="error"
                         onClick={() => handleRemoveFromCart(item)}
-                        sx={{ ml: 1 }}
                       >
                         <DeleteOutlineIcon fontSize="small" />
                       </IconButton>
+                      {item.metadata?.isCustomizable && (
+                        <IconButton onClick={() => handleEditCartItem(item)}>
+                          <EditIcon
+                            fontSize="small"
+                            sx={{ color: colors.primary[400] }}
+                          />
+                        </IconButton>
+                      )}
                     </div>
                   </div>
                 </div>

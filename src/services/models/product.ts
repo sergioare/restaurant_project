@@ -35,6 +35,7 @@ type Product = {
   stats: Stats;
   promotions: Promotions;
   metadata: Metadata;
+  customizationHash?: string;
 };
 
 type CustomizationType = "single" | "multiple";

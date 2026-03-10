@@ -18,7 +18,11 @@ const DetailProductContainer = () => {
   if (!selectedProduct) return null;
   if (isLoadingCustom) return <Spinner />;
 
-  return <DetailProductComponent />;
+  return (
+    <DetailProductComponent
+      key={selectedProduct.customizationHash ?? selectedProduct.id}
+    />
+  );
 };
 
 export default DetailProductContainer;

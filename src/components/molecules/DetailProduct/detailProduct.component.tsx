@@ -20,19 +20,49 @@ import DetailProductStyles from "./detailProduct.styles";
 const { colors } = theme;
 
 const DetailProductComponent = () => {
-  const { isProductDetailOpen, selectedProduct, setIsProductDetailOpen } =
-    useProductStore();
+  const {
+    products,
+    isProductDetailOpen,
+    selectedProduct,
+    setIsProductDetailOpen,
+    isEditingProduct,
+    setIsEditingProduct,
+  } = useProductStore();
 
   const { addEvent } = useEventStore();
 
-  const { addToCart, items: cartItems } = useCartStore();
+  const {
+    addToCart,
+    items: cartItems,
+    editCartItem,
+    setIsOpen,
+  } = useCartStore();
 
-  const [quantity, setQuantity] = useState(1);
-  const [error, setError] = useState<string | null>(null);
-  const [imgError, setImgError] = useState(false);
+  const currentItem =
+    isEditingProduct &&
+    selectedProduct &&
+    cartItems.find(
+      (item) => item.customizationHash === selectedProduct?.customizationHash,
+    );
+
   const [selectedOptions, setSelectedOptions] = useState<
     Record<string, unknown>
-  >({});
+  >(() => {
+    if (isEditingProduct && currentItem) {
+      return currentItem.selectedOptions ?? {};
+    }
+    return {};
+  });
+
+  const [quantity, setQuantity] = useState<number>(() => {
+    if (isEditingProduct && currentItem) {
+      return currentItem.quantity;
+    }
+    return 1;
+  });
+
+  const [error, setError] = useState<string | null>(null);
+  const [imgError, setImgError] = useState(false);
 
   const { calculateExtraPrice, validateCustomizations, currentCustomization } =
     useDetailProduct({
@@ -71,13 +101,15 @@ const DetailProductComponent = () => {
     setError(null);
   };
 
-  const totalUnitWeight =
-    (selectedProduct?.priceInCents || 0) + calculateExtraPrice();
+  const baseProduct = products.find((p) => p.id === selectedProduct?.id);
+  const originalBasePrice = baseProduct?.priceInCents || 0;
+  const currentExtraPrice = calculateExtraPrice();
+  const totalUnitWeight = originalBasePrice + currentExtraPrice;
   const finalTotalPrice = totalUnitWeight * quantity;
 
   const handleAddWithQuantity = () => {
     if (!validateCustomizations()) return;
-    if (selectedProduct) {
+    if (selectedProduct && !isEditingProduct) {
       addToCart(selectedProduct, quantity, selectedOptions, totalUnitWeight);
 
       const eventPayload = {
@@ -90,6 +122,33 @@ const DetailProductComponent = () => {
       };
       addEvent("CART_ITEM_ADDED", eventPayload);
       setSelectedOptions({});
+      handleClose();
+    }
+  };
+
+  const handleEditCartItem = () => {
+    if (!validateCustomizations()) return;
+    if (currentItem && isEditingProduct) {
+      editCartItem(
+        String(currentItem.customizationHash),
+        {
+          ...currentItem,
+          quantity,
+          selectedOptions,
+        },
+        totalUnitWeight,
+      );
+      addEvent("CART_ITEM_UPDATED", {
+        reason: "edit_cart_item",
+        oldHash: selectedProduct.customizationHash,
+        newQuantity: quantity,
+        selectedOptions,
+        totalInCents: finalTotalPrice,
+        productId: selectedProduct.id,
+      });
+      setIsEditingProduct(false);
+      setSelectedOptions({});
+      setIsOpen(true);
       handleClose();
     }
   };
@@ -182,7 +241,9 @@ const DetailProductComponent = () => {
               error={error}
               handleDecrement={handleDecrement}
               handleIncrement={handleIncrement}
-              handleAddWithQuantity={handleAddWithQuantity}
+              handleAddWithQuantity={
+                isEditingProduct ? handleEditCartItem : handleAddWithQuantity
+              }
             />
           </div>
         </div>

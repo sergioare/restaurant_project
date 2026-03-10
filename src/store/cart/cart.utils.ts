@@ -58,4 +58,23 @@ const getSelectedOptionsText = (
   return summary;
 };
 
-export { calculateTotals, getSelectedOptionsText };
+const generateCustomizationHash = (
+  productId: string,
+  selectedOptions?: Record<string, unknown>,
+): string => {
+  if (!selectedOptions || Object.keys(selectedOptions).length === 0) {
+    return productId;
+  }
+
+  const sortedOptionsString = Object.keys(selectedOptions)
+    .sort()
+    .map((sectionId) => {
+      const val = selectedOptions[sectionId];
+      const valueString = Array.isArray(val) ? [...val].sort().join(",") : val;
+      return `${sectionId}:${valueString}`;
+    })
+    .join("|");
+
+  return `${productId}#${sortedOptionsString}`;
+};
+export { calculateTotals, getSelectedOptionsText, generateCustomizationHash };
