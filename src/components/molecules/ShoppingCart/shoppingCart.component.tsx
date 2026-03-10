@@ -13,6 +13,7 @@ import { Button } from "@/components/atoms/Button";
 import { Typography } from "@/components/atoms/Typography";
 import useCartStore from "@/store/cart/cart.store";
 import { getSelectedOptionsText } from "@/store/cart/cart.utils";
+import useProductStore from "@/store/products/products.store";
 import { formatPriceFromCents } from "@/utils/constants/formatPrice";
 import { theme } from "@/utils/ThemeProvider";
 
@@ -28,6 +29,8 @@ const ShoppingCartComponent = () => {
     updateQuantity,
     removeFromCart,
   } = useCartStore();
+
+  const { customizations } = useProductStore();
 
   const router = useRouter();
   const handleClose = () => setIsOpen(false);
@@ -79,15 +82,17 @@ const ShoppingCartComponent = () => {
                     {item.selectedOptions &&
                     Object.keys(item.selectedOptions).length > 0 ? (
                       <div className="cart__item-options">
-                        {getSelectedOptionsText(item)?.map((text, idx) => (
-                          <Typography
-                            key={idx}
-                            variant="p3"
-                            color={colors.buttons.orange}
-                          >
-                            {text}
-                          </Typography>
-                        ))}
+                        {getSelectedOptionsText(item, customizations)?.map(
+                          (text, idx) => (
+                            <Typography
+                              key={idx}
+                              variant="p3"
+                              color={colors.buttons.orange}
+                            >
+                              {text}
+                            </Typography>
+                          ),
+                        )}
                       </div>
                     ) : (
                       <div className="cart__item-options">

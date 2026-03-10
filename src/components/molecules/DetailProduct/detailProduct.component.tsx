@@ -8,7 +8,6 @@ import Chip from "@/components/atoms/Chip";
 import { Typography } from "@/components/atoms/Typography";
 import useCartStore from "@/store/cart/cart.store";
 import useProductStore from "@/store/products/products.store";
-import { CUSTOMIZATIONS_MOCK } from "@/store/products/products.utils";
 import { formatPriceFromCents } from "@/utils/constants/formatPrice";
 import { theme } from "@/utils/ThemeProvider";
 
@@ -19,8 +18,13 @@ import DetailProductStyles from "./detailProduct.styles";
 const { colors } = theme;
 
 const DetailProductComponent = () => {
-  const { isProductDetailOpen, selectedProduct, setIsProductDetailOpen } =
-    useProductStore();
+  const {
+    isProductDetailOpen,
+    selectedProduct,
+    setIsProductDetailOpen,
+    customizations,
+  } = useProductStore();
+
   const { addToCart, items: cartItems } = useCartStore();
 
   const [quantity, setQuantity] = useState(1);
@@ -61,8 +65,8 @@ const DetailProductComponent = () => {
     setError(null);
   };
 
-  const currentCustomization = CUSTOMIZATIONS_MOCK.find(
-    (custom) => custom.id === selectedProduct?.metadata?.customizationId,
+  const currentCustomization = customizations.find(
+    (custom) => custom?.id === selectedProduct?.metadata?.customizationId,
   );
 
   const calculateExtraPrice = () => {
@@ -124,6 +128,8 @@ const DetailProductComponent = () => {
                   src={selectedProduct?.image}
                   alt={selectedProduct?.name}
                   fill
+                  sizes="430px"
+                  priority
                   style={{ objectFit: "cover" }}
                   onError={() => setImgError(true)}
                 />
