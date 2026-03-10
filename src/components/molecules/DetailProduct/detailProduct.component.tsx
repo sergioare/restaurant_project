@@ -7,6 +7,7 @@ import Image from "next/image";
 import Chip from "@/components/atoms/Chip";
 import { Typography } from "@/components/atoms/Typography";
 import useCartStore from "@/store/cart/cart.store";
+import useEventStore from "@/store/events/events.store";
 import useProductStore from "@/store/products/products.store";
 import { formatPriceFromCents } from "@/utils/constants/formatPrice";
 import { theme } from "@/utils/ThemeProvider";
@@ -21,6 +22,8 @@ const { colors } = theme;
 const DetailProductComponent = () => {
   const { isProductDetailOpen, selectedProduct, setIsProductDetailOpen } =
     useProductStore();
+
+  const { addEvent } = useEventStore();
 
   const { addToCart, items: cartItems } = useCartStore();
 
@@ -76,6 +79,15 @@ const DetailProductComponent = () => {
     if (!validateCustomizations()) return;
     if (selectedProduct) {
       addToCart(selectedProduct, quantity, selectedOptions, totalUnitWeight);
+
+      const eventPayload = {
+        name: selectedProduct.name,
+        quantity,
+        selectedOptions,
+        basePrice: selectedProduct.priceInCents,
+        totalInCents: finalTotalPrice,
+      };
+      addEvent("CART_ITEM_ADDED", eventPayload);
       setSelectedOptions({});
       handleClose();
     }
