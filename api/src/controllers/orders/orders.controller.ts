@@ -75,7 +75,7 @@ export const createOrder = async (
         ...event,
         userId: finalUserId,
         correlationId,
-        timestamp: Timestamp.fromDate(event.timestamp),
+        // timestamp: Timestamp.fromDate(event.timestamp),
         source: "web",
       }));
 

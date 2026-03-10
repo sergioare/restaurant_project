@@ -17,7 +17,7 @@ export const getTimeline = async (
 
     const timeline = await TimelineService.getOrderTimeline(String(orderId));
 
-    if (timeline.length === 0) {
+    if (timeline.orderId === undefined) {
       return res.status(404).json({
         error: "Not Found",
         message: "No events found for the provided Order ID.",
@@ -25,9 +25,8 @@ export const getTimeline = async (
     }
 
     return res.status(200).json({
-      status: "Success",
+      ...timeline,
       orderId,
-      events: timeline,
     });
   } catch (error) {
     console.error("Controller Error - getTimeline:", error);
