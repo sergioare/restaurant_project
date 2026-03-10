@@ -1,11 +1,12 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "crypto";
 import { OrderStatus } from "../../models/order.model";
-import { db, Timestamp } from "../firebase.service";
+import { db } from "../firebase.service";
 import {
   EventType,
   FirestoreTimestamp,
   OrderEvent,
 } from "../../models/events.model";
+import { Timestamp } from "firebase-admin/firestore";
 
 type StatusUpdateResult = {
   orderId: string;
@@ -28,11 +29,12 @@ export const updateOrderStatus = async (
         throw new Error("ERROR_ORDER_NOT_FOUND");
       }
 
+      const nowDate = Timestamp.now();
       const orderData = orderDoc.data();
       const previousStatus = orderData?.status as OrderStatus;
       const orderType: EventType = "ORDER_STATUS_CHANGED";
 
-      const serverTime: FirestoreTimestamp = Timestamp;
+      const serverTime: FirestoreTimestamp = nowDate;
 
       const eventId = uuidv4();
       const eventRef = db.collection("order_events").doc(eventId);

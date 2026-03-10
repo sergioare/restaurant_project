@@ -1,10 +1,12 @@
 import * as admin from "firebase-admin";
+import serviceAccount from "../config/serviceAccountKey.json";
 
 if (!admin.apps.length) {
-  admin.initializeApp();
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+  });
 }
 
 const db = admin.firestore();
-const Timestamp = admin.firestore.FieldValue.serverTimestamp();
 
-export { db, Timestamp };
+export { db };

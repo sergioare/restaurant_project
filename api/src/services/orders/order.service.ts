@@ -1,9 +1,10 @@
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID as uuidv4 } from "crypto";
 import { CheckoutRequest } from "../../models/cart.model";
-import { db, Timestamp } from "../firebase.service";
+import { db } from "../firebase.service";
 import { FirestoreTimestamp, OrderEvent } from "../../models/events.model";
 import { calculateOrderTotals } from "../../utils/calculateOrderTotals";
 import { Order } from "../../models/order.model";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const processCheckout = async (
   orderData: CheckoutRequest,
@@ -21,10 +22,10 @@ export const processCheckout = async (
         const existingData = idempotencyDoc.data();
         throw new Error(`DUPLICATE_REQUEST_DETECTED:${existingData?.orderId}`);
       }
-
+      const nowDate = Timestamp.now();
       const orderId = uuidv4();
       const eventId = uuidv4();
-      const serverTime: FirestoreTimestamp = Timestamp;
+      const serverTime: FirestoreTimestamp = nowDate;
 
       const totals = calculateOrderTotals(orderData.items, orderData.config);
 

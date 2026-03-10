@@ -1,8 +1,10 @@
+import { FirestoreTimestamp } from "./events.model";
+
 type Category = "burgers" | "pizzas" | "wraps" | "sides" | "tacos" | "drinks";
 
 type Metadata = {
-  createdAt: string;
-  updatedAt: string;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
   createdBy: string;
   isActive: boolean;
   stock: number;

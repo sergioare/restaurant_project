@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { CheckoutRequest } from "../../models/cart.model";
 import * as OrderService from "../../services/orders/order.service";
-import { db, Timestamp } from "../../services/firebase.service";
+import { db } from "../../services/firebase.service";
 import { OrderEvent } from "../../models/events.model";
 import * as EventSyncService from "../../services/orders/eventsSync.service";
 import { CustomerType } from "../../models/order.model";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const createOrder = async (
   req: Request,
@@ -39,6 +40,8 @@ export const createOrder = async (
       });
     }
 
+    const nowDate = Timestamp.now();
+
     let finalUserId = userId;
     let customerType: CustomerType = "guest";
 
@@ -54,13 +57,13 @@ export const createOrder = async (
           phone: phone || null,
           role: "customer",
           isGuest: true,
-          createdAt: Timestamp,
-          lastSeen: Timestamp,
+          createdAt: nowDate,
+          lastSeen: nowDate,
         });
         customerType = "guest";
       } else {
         const userData = userDoc.data();
-        await userRef.update({ lastSeen: Timestamp });
+        await userRef.update({ lastSeen: nowDate });
         customerType = userData?.isGuest ? "guest" : "customer";
       }
 
