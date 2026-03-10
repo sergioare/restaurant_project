@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 
+import { OrderStatusProps } from "@/components/modules/OrderStatus/orderStatus.model";
 import api from "@/utils/api/api.client";
 import { ORDERS_SERVICE_URL } from "@/utils/constants/url.constants";
 
@@ -13,6 +14,13 @@ const orderService = {
         "Idempotency-Key": uuidv4(),
       },
     });
+    return data;
+  },
+
+  getOrderTimeline: async (orderId: string) => {
+    const { data } = await api.get<OrderStatusProps>(
+      `${ORDERS_SERVICE_URL}/${orderId}/timeline`,
+    );
     return data;
   },
 };
